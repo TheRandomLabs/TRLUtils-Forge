@@ -31,15 +31,15 @@ public final class ResourceLocationTypeAdapter implements TypeAdapter {
 	@Override
 	public Object getValue(CommentedFileConfig config, String name, Object defaultValue) {
 		if(!isArray) {
-			final String location = config.get(name);
+			final String locationString = config.get(name);
 
-			if(location.isEmpty()) {
+			if(locationString.isEmpty()) {
 				return defaultValue;
 			}
 
-			final Object object =
-					registry.getValue(new ResourceLocation(location.replaceAll("\\s", "")));
-			return object == null ? defaultValue : object;
+			final ResourceLocation location =
+					new ResourceLocation(locationString.replaceAll("\\s", ""));
+			return registry.containsKey(location) ? registry.getValue(location) : defaultValue;
 		}
 
 		final List<String> list = config.get(name);
