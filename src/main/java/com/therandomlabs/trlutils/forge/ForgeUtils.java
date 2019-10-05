@@ -1,4 +1,4 @@
-package com.therandomlabs.trutils.forge;
+package com.therandomlabs.trlutils.forge;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

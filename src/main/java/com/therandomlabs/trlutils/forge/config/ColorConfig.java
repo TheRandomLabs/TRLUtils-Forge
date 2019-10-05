@@ -1,4 +1,4 @@
-package com.therandomlabs.trutils.forge.config;
+package com.therandomlabs.trlutils.forge.config;
 
 import net.minecraft.item.DyeColor;
 

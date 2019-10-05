@@ -1,4 +1,4 @@
-package com.therandomlabs.trutils.forge.config;
+package com.therandomlabs.trlutils.forge.config;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.therandomlabs.trlutils.config.adapter.TypeAdapter;
 import com.therandomlabs.trlutils.config.adapter.TypeAdapters;
-import com.therandomlabs.trutils.forge.ForgeUtils;
+import com.therandomlabs.trlutils.forge.ForgeUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.registries.IForgeRegistry;

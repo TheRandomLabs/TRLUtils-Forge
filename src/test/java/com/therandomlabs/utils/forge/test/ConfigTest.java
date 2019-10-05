@@ -3,7 +3,7 @@ package com.therandomlabs.utils.forge.test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import com.therandomlabs.trlutils.config.Config;
-import com.therandomlabs.trutils.forge.config.ColorConfig;
+import com.therandomlabs.trlutils.forge.config.ColorConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 

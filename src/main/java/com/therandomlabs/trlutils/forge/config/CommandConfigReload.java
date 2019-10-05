@@ -1,4 +1,4 @@
-package com.therandomlabs.trutils.forge.config;
+package com.therandomlabs.trlutils.forge.config;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;

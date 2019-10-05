@@ -1,8 +1,8 @@
 package com.therandomlabs.utils.forge.test;
 
 import com.therandomlabs.trlutils.config.ConfigManager;
-import com.therandomlabs.trutils.forge.config.CommandConfigReload;
-import com.therandomlabs.trutils.forge.config.ForgeConfig;
+import com.therandomlabs.trlutils.forge.config.CommandConfigReload;
+import com.therandomlabs.trlutils.forge.config.ForgeConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
