@@ -1,0 +1,14 @@
+modLoader = "javafml"
+loaderVersion = "[14,)"
+issueTrackerURL = "https://github.com/TheRandomLabs/TRLUtils-Forge/issues"
+logoFile = "logo.png"
+authors = "TheRandomLabs"
+
+[[mods]]
+
+modId = "trlutilsforgetest"
+version = "${file.jarVersion}"
+displayName = "TRLUtils-Forge Test"
+description = '''
+TRLUtils-Forge Test, a test mod for TRLUtils-Forge.
+'''
