@@ -1,9 +1,9 @@
-package com.therandomlabs.trlutils.forge.config;
+package com.therandomlabs.utils.forge.config;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.therandomlabs.trlutils.config.ConfigManager;
+import com.therandomlabs.utils.config.ConfigManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.StringTextComponent;

@@ -1,12 +1,12 @@
-package com.therandomlabs.trlutils.forge.config;
+package com.therandomlabs.utils.forge.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import com.therandomlabs.trlutils.config.ConfigManager;
-import com.therandomlabs.trlutils.forge.ForgeUtils;
+import com.therandomlabs.utils.config.ConfigManager;
+import com.therandomlabs.utils.forge.ForgeUtils;
 import net.minecraftforge.forgespi.language.MavenVersionAdapter;
 import org.apache.maven.artifact.versioning.VersionRange;
 

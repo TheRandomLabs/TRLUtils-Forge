@@ -1,4 +1,4 @@
-package com.therandomlabs.trlutils.forge;
+package com.therandomlabs.utils.forge;
 
 public final class BooleanWrapper {
 	private boolean value;
