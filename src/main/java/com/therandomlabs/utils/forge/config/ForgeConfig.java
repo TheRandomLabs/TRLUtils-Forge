@@ -30,7 +30,7 @@ public final class ForgeConfig {
 	public static void initialize() {
 		ConfigManager.setClient(ForgeUtils.IS_CLIENT);
 		ConfigManager.registerVersionChecker(ForgeConfig::testVersionRange);
-		ResourceLocationTypeAdapter.initialize();
+		RegistryEntryAdapter.initialize();
 	}
 
 	private static boolean testVersionRange(Field field) {

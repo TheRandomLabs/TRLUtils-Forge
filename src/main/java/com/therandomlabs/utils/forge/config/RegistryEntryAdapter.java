@@ -15,21 +15,23 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
 
-public final class ResourceLocationTypeAdapter implements TypeAdapter {
+@SuppressWarnings("rawtypes")
+public final class RegistryEntryAdapter implements TypeAdapter {
 	private final Class<IForgeRegistryEntry<?>> registryEntryClass;
-	private final IForgeRegistry<?> registry;
 	private final boolean isArray;
+	private IForgeRegistry<?> registry;
 
-	public ResourceLocationTypeAdapter(
+	public RegistryEntryAdapter(
 			Class<IForgeRegistryEntry<?>> registryEntryClass, boolean isArray
 	) {
 		this.registryEntryClass = registryEntryClass;
-		registry = RegistryManager.ACTIVE.getRegistry(registryEntryClass);
 		this.isArray = isArray;
 	}
 
 	@Override
 	public Object getValue(CommentedFileConfig config, String name, Object defaultValue) {
+		getRegistry();
+
 		if(!isArray) {
 			final String locationString = config.get(name);
 
@@ -93,6 +95,8 @@ public final class ResourceLocationTypeAdapter implements TypeAdapter {
 
 	@Override
 	public Object reloadDefault(Object defaultValue) {
+		getRegistry();
+
 		if(!isArray()) {
 			if(defaultValue == null) {
 				return null;
@@ -113,6 +117,14 @@ public final class ResourceLocationTypeAdapter implements TypeAdapter {
 		return newDefaults.toArray(Arrays.copyOf(oldDefaults, 0));
 	}
 
+	private IForgeRegistry getRegistry() {
+		if(registry == null) {
+			registry = RegistryManager.ACTIVE.getRegistry(registryEntryClass);
+		}
+
+		return registry;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static void registerIfRegistryEntry(Class<?> clazz) {
 		if(IForgeRegistryEntry.class.isAssignableFrom(clazz)) {
@@ -127,14 +139,14 @@ public final class ResourceLocationTypeAdapter implements TypeAdapter {
 	}
 
 	static void initialize() {
-		TypeAdapters.registerAutoRegistrar(ResourceLocationTypeAdapter::registerIfRegistryEntry);
+		TypeAdapters.registerAutoRegistrar(RegistryEntryAdapter::registerIfRegistryEntry);
 	}
 
 	private static void register(Class<IForgeRegistryEntry<?>> clazz) {
-		TypeAdapters.register(clazz, new ResourceLocationTypeAdapter(clazz, false));
+		TypeAdapters.register(clazz, new RegistryEntryAdapter(clazz, false));
 		TypeAdapters.register(
 				Array.newInstance(clazz, 0).getClass(),
-				new ResourceLocationTypeAdapter(clazz, true)
+				new RegistryEntryAdapter(clazz, true)
 		);
 	}
 }
