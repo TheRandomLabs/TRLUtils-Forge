@@ -10,7 +10,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 
-public final class CommandConfigReload {
+public final class ConfigReloadCommand {
 	@FunctionalInterface
 	public interface ConfigReloader {
 		void reload(ReloadPhase phase, CommandSource source);
@@ -21,7 +21,7 @@ public final class CommandConfigReload {
 		POST
 	}
 
-	private CommandConfigReload() {}
+	private ConfigReloadCommand() {}
 
 	public static void client(
 			CommandDispatcher<CommandSource> dispatcher, String name, Class<?> configClass
