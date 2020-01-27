@@ -1,5 +1,7 @@
 package com.therandomlabs.utils.forge.test;
 
+import java.lang.reflect.Method;
+
 import com.therandomlabs.utils.config.ConfigManager;
 import com.therandomlabs.utils.forge.config.ConfigReloadCommand;
 import com.therandomlabs.utils.forge.config.ForgeConfig;
@@ -17,6 +19,12 @@ public final class TRLUtilsForgeTest {
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	public TRLUtilsForgeTest() {
+		try {
+			final Method method = ClassLoader.class.getDeclaredMethod("initLibraryPaths");
+			method.setAccessible(true);
+			method.invoke(null);
+		} catch (Exception ignored) {}
+
 		ForgeConfig.initialize();
 		ConfigManager.register(ConfigTest.class);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);

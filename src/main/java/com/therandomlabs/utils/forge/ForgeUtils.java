@@ -3,10 +3,11 @@ package com.therandomlabs.utils.forge;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+
+import com.google.common.base.Preconditions;
 import cpw.mods.modlauncher.ArgumentHandler;
 import cpw.mods.modlauncher.Launcher;
 import net.minecraft.crash.CrashReport;
@@ -19,6 +20,7 @@ import net.minecraftforge.versions.mcp.MCPVersion;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class ForgeUtils {
 	public static final boolean IS_DEOBFUSCATED;
@@ -42,105 +44,152 @@ public final class ForgeUtils {
 
 			IS_DEOBFUSCATED = "fmluserdevclient".equals(launchTarget) ||
 					"fmluserdevserver".equals(launchTarget);
-		} catch(IllegalAccessException | InvocationTargetException ex) {
+		} catch (IllegalAccessException | InvocationTargetException ex) {
 			throw new RuntimeException("Failed to determine launch target", ex);
 		}
 	}
 
 	private ForgeUtils() {}
 
-	public static Object toPrimitiveArray(Object[] boxedArray) {
-		if(boxedArray instanceof Boolean[]) {
-			return ArrayUtils.toPrimitive((Boolean[]) boxedArray);
+	/**
+	 * Returns the specified array as a primitive array.
+	 *
+	 * @param array a boxed array.
+	 * @return the specified array as a primitive array.
+	 */
+	public static Object toPrimitiveArray(Object[] array) {
+		if (array instanceof Boolean[]) {
+			return ArrayUtils.toPrimitive((Boolean[]) array);
 		}
 
-		if(boxedArray instanceof Byte[]) {
-			return ArrayUtils.toPrimitive((Byte[]) boxedArray);
+		if (array instanceof Byte[]) {
+			return ArrayUtils.toPrimitive((Byte[]) array);
 		}
 
-		if(boxedArray instanceof Character[]) {
-			return ArrayUtils.toPrimitive((Character[]) boxedArray);
+		if (array instanceof Character[]) {
+			return ArrayUtils.toPrimitive((Character[]) array);
 		}
 
-		if(boxedArray instanceof Double[]) {
-			return ArrayUtils.toPrimitive((Double[]) boxedArray);
+		if (array instanceof Double[]) {
+			return ArrayUtils.toPrimitive((Double[]) array);
 		}
 
-		if(boxedArray instanceof Float[]) {
-			return ArrayUtils.toPrimitive((Float[]) boxedArray);
+		if (array instanceof Float[]) {
+			return ArrayUtils.toPrimitive((Float[]) array);
 		}
 
-		if(boxedArray instanceof Integer[]) {
-			return ArrayUtils.toPrimitive((Integer[]) boxedArray);
+		if (array instanceof Integer[]) {
+			return ArrayUtils.toPrimitive((Integer[]) array);
 		}
 
-		if(boxedArray instanceof Long[]) {
-			return ArrayUtils.toPrimitive((Long[]) boxedArray);
+		if (array instanceof Long[]) {
+			return ArrayUtils.toPrimitive((Long[]) array);
 		}
 
-		if(boxedArray instanceof Short[]) {
-			return ArrayUtils.toPrimitive((Short[]) boxedArray);
+		if (array instanceof Short[]) {
+			return ArrayUtils.toPrimitive((Short[]) array);
 		}
 
-		return boxedArray;
+		throw new IllegalArgumentException("array should be a boxed array");
 	}
 
-	public static Object[] toBoxedArray(Object primitiveArray) {
-		if(primitiveArray instanceof Object[]) {
-			return (Object[]) primitiveArray;
+	/**
+	 * Returns the specified array as a boxed array.
+	 *
+	 * @param array a primitive array.
+	 * @return the specified array as a boxed array.
+	 */
+	public static Object[] toBoxedArray(Object array) {
+		Preconditions.checkNotNull(array, "array should not be null");
+
+		if (array instanceof Object[]) {
+			return (Object[]) array;
 		}
 
-		if(primitiveArray instanceof boolean[]) {
-			return ArrayUtils.toObject((byte[]) primitiveArray);
+		if (array instanceof boolean[]) {
+			return ArrayUtils.toObject((boolean[]) array);
 		}
 
-		if(primitiveArray instanceof byte[]) {
-			return ArrayUtils.toObject((byte[]) primitiveArray);
+		if (array instanceof byte[]) {
+			return ArrayUtils.toObject((byte[]) array);
 		}
 
-		if(primitiveArray instanceof char[]) {
-			return ArrayUtils.toObject((char[]) primitiveArray);
+		if (array instanceof char[]) {
+			return ArrayUtils.toObject((char[]) array);
 		}
 
-		if(primitiveArray instanceof double[]) {
-			return ArrayUtils.toObject((double[]) primitiveArray);
+		if (array instanceof double[]) {
+			return ArrayUtils.toObject((double[]) array);
 		}
 
-		if(primitiveArray instanceof float[]) {
-			return ArrayUtils.toObject((float[]) primitiveArray);
+		if (array instanceof float[]) {
+			return ArrayUtils.toObject((float[]) array);
 		}
 
-		if(primitiveArray instanceof int[]) {
-			return ArrayUtils.toObject((int[]) primitiveArray);
+		if (array instanceof int[]) {
+			return ArrayUtils.toObject((int[]) array);
 		}
 
-		if(primitiveArray instanceof long[]) {
-			return ArrayUtils.toObject((long[]) primitiveArray);
+		if (array instanceof long[]) {
+			return ArrayUtils.toObject((long[]) array);
 		}
 
-		if(primitiveArray instanceof short[]) {
-			return ArrayUtils.toObject((long[]) primitiveArray);
+		if (array instanceof short[]) {
+			return ArrayUtils.toObject((short[]) array);
 		}
 
-		return (Object[]) primitiveArray;
+		throw new IllegalArgumentException("array should be an array");
 	}
 
+	/**
+	 * Returns the specified string as a normalized {@link Path}.
+	 *
+	 * @param path a path.
+	 * @return the specified string as a normalized {@link Path}.
+	 */
 	public static Path getPath(String path) {
-		try {
-			return Paths.get(path).normalize();
-		} catch(InvalidPathException ignored) {}
-
-		return null;
+		return Paths.get(path).normalize();
 	}
 
-	public static String toStringWithUnixPathSeparators(Path path) {
-		return path.toString().replace('\\', '/');
+	/**
+	 * Returns the string representation of the specified {@link Path} with Unix directory
+	 * separators.
+	 *
+	 * @param path a {@link Path}.
+	 * @return the string representation of the specified {@link Path} with Unix directory
+	 * separators.
+	 */
+	public static String withUnixDirectorySeparators(Path path) {
+		Preconditions.checkNotNull(path, "path should not be null");
+		return withUnixDirectorySeparators(path.toString());
 	}
 
-	public static Field findField(Class<?> clazz, String... names) {
-		for(Field field : clazz.getDeclaredFields()) {
-			for(String name : names) {
-				if(name.equals(field.getName())) {
+	/**
+	 * Returns the specified path with Unix directory separators.
+	 *
+	 * @param path a path.
+	 * @return the specified path with Unix directory separators.
+	 */
+	public static String withUnixDirectorySeparators(String path) {
+		Preconditions.checkNotNull(path, "path should not be null");
+		return path.replace('\\', '/');
+	}
+
+	/**
+	 * Quietly retrieves the field with any of the specified names in the specified class.
+	 *
+	 * @param clazz a class.
+	 * @param names an array of possible field names.
+	 * @return the {@link Field} with any of the specified names, or otherwise {@code null}.
+	 */
+	@Nullable
+	public static Field findFieldNullable(Class<?> clazz, String... names) {
+		Preconditions.checkNotNull(clazz, "clazz should not be null");
+		Preconditions.checkNotNull(names, "names should not be null");
+
+		for (Field field : clazz.getDeclaredFields()) {
+			for (String name : names) {
+				if (name.equals(field.getName())) {
 					field.setAccessible(true);
 					return field;
 				}
@@ -150,16 +199,67 @@ public final class ForgeUtils {
 		return null;
 	}
 
-	public static Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
-		return findMethod(clazz, name, name, parameterTypes);
+	/**
+	 * Quietly retrieves the field with any of the specified names in the specified class.
+	 *
+	 * @param clazz a class.
+	 * @param names an array of possible field names.
+	 * @return the {@link Field} with any of the specified names.
+	 * @throws IllegalArgumentException if the specified field is not found.
+	 */
+	public static Field findField(Class<?> clazz, String... names) {
+		final Field field = findFieldNullable(clazz, names);
+
+		if (field == null) {
+			throw new IllegalArgumentException(
+					"No such field " + Arrays.toString(names) + " in: " + clazz.getName()
+			);
+		}
+
+		return field;
 	}
 
-	public static Method findMethod(Class<?> clazz, String name, String obfName,
-			Class<?>... parameterTypes) {
-		for(Method method : clazz.getDeclaredMethods()) {
+	/**
+	 * Quietly retrieves the method with the specified name and parameter types in the
+	 * specified class.
+	 *
+	 * @param clazz a class.
+	 * @param name a method name.
+	 * @param parameterTypes an array of parameter types.
+	 * @return a {@link Method} that matches the specified parameters, or otherwise {@code null}.
+	 */
+	@SuppressWarnings("GrazieInspection")
+	@Nullable
+	public static Method findMethodNullable(
+			Class<?> clazz, String name, Class<?>... parameterTypes
+	) {
+		return findMethodNullable(clazz, name, name, parameterTypes);
+	}
+
+	/**
+	 * Quietly retrieves the method with the specified name or obfuscated name and parameter types
+	 * in the specified class.
+	 *
+	 * @param clazz a class.
+	 * @param name a method name.
+	 * @param obfuscatedName an obfuscated method name.
+	 * @param parameterTypes an array of parameter types.
+	 * @return a {@link Method} that matches the specified parameters, or otherwise {@code null}.
+	 */
+	@SuppressWarnings("GrazieInspection")
+	@Nullable
+	public static Method findMethodNullable(
+			Class<?> clazz, String name, String obfuscatedName, Class<?>... parameterTypes
+	) {
+		Preconditions.checkNotNull(clazz, "clazz should not be null");
+		Preconditions.checkNotNull(name, "name should not be null");
+		Preconditions.checkNotNull(obfuscatedName, "obfuscatedName should not be null");
+		Preconditions.checkNotNull(parameterTypes, "parameterTypes should not be null");
+
+		for (Method method : clazz.getDeclaredMethods()) {
 			final String methodName = method.getName();
 
-			if((name.equals(methodName) || obfName.equals(methodName)) &&
+			if ((name.equals(methodName) || obfuscatedName.equals(methodName)) &&
 					Arrays.equals(method.getParameterTypes(), parameterTypes)) {
 				method.setAccessible(true);
 				return method;
@@ -169,10 +269,73 @@ public final class ForgeUtils {
 		return null;
 	}
 
+	/**
+	 * Quietly retrieves the method with the specified name and parameter types in the
+	 * specified class.
+	 *
+	 * @param clazz a class.
+	 * @param name a method name.
+	 * @param parameterTypes an array of parameter types.
+	 * @return a {@link Method} that matches the specified parameters.
+	 * @throws IllegalArgumentException if the specified field is not found.
+	 */
+	@SuppressWarnings("GrazieInspection")
+	@Nullable
+	public static Method findMethod(
+			Class<?> clazz, String name, Class<?>... parameterTypes
+	) {
+		final Method method = findMethodNullable(clazz, name, parameterTypes);
+
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"No such method " + name + " in: " + clazz.getName()
+			);
+		}
+
+		return method;
+	}
+
+	/**
+	 * Quietly retrieves the method with the specified name or obfuscated name and parameter types
+	 * in the specified class.
+	 *
+	 * @param clazz a class.
+	 * @param name a method name.
+	 * @param obfuscatedName an obfuscated method name.
+	 * @param parameterTypes an array of parameter types.
+	 * @return a {@link Method} that matches the specified parameters.
+	 * @throws IllegalArgumentException if the specified field is not found.
+	 */
+	@SuppressWarnings("GrazieInspection")
+	@Nullable
+	public static Method findMethod(
+			Class<?> clazz, String name, String obfuscatedName, Class<?>... parameterTypes
+	) {
+		final Method method = findMethodNullable(clazz, name, obfuscatedName, parameterTypes);
+
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"No such method " + name + " in: " + clazz.getName()
+			);
+		}
+
+		return method;
+	}
+
+	/**
+	 * Quietly retrieves the class with the specified name.
+	 *
+	 * @param name a class name.
+	 * @return the class with the specified name as returned by {@link Class#forName(String)},
+	 * or {@code null} if it cannot be found.
+	 */
+	@Nullable
 	public static Class<?> getClass(String name) {
+		Preconditions.checkNotNull(name, "name should not be null");
+
 		try {
 			return Class.forName(name);
-		} catch(ClassNotFoundException ignored) {}
+		} catch (ClassNotFoundException ignored) {}
 
 		return null;
 	}
@@ -186,7 +349,16 @@ public final class ForgeUtils {
 		return stage.ordinal() <= getModLoadingStage().ordinal();
 	}
 
+	/**
+	 * Throws a {@link ReportedException} by constructing a {@link CrashReport} with the specified
+	 * message and {@link Throwable}.
+	 *
+	 * @param message a message.
+	 * @param throwable a {@link Throwable}.
+	 */
 	public static void crashReport(String message, Throwable throwable) {
+		Preconditions.checkNotNull(message, "message should not be null");
+		Preconditions.checkNotNull(throwable, "throwable should not be null");
 		throw new ReportedException(new CrashReport(message, throwable));
 	}
 }
