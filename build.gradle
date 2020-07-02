@@ -70,7 +70,7 @@ repositories {
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:1.16.1-32.0.40"
+	minecraft "net.minecraftforge:forge:1.16.1-32.0.41"
 
 	implementation group: "com.github.TheRandomLabs", name: "TRLUtils-Config", version: "master-SNAPSHOT", changing: true
 
